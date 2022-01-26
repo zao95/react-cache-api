@@ -1,15 +1,15 @@
 # React Cache API
 
-React Cache API response for reduce network trafic.
+React Cache API is a React Hooks library for data fetching.
 
-React Cache API was inspired by the [swr](https://swr.vercel.app/).
-
-## 🚀Quick Overview
+It was inspired by the [swr](https://swr.vercel.app/).
 
 **[Demo website](https://cache-api.awmaker.com)**
 
+## 🚀Quick Overview
+
 ```javascript
-// Please enclose the component to call useCacheApi with this component.
+// Please wrap the component to call useCacheApi with this component.
 // In the case of nextJS, it is recommended to wrap the component in the _app file.
 <CacheApiConfig baseURL="https://yourapiendpoint">
     <Component />
