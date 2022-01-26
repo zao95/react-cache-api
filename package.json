@@ -1,0 +1,45 @@
+{
+    "name": "react-cache-api",
+    "version": "0.1.0",
+    "description": "Save network request using cache.",
+    "keywords": [
+        "api",
+        "cache",
+        "react",
+        "next"
+    ],
+    "homepage": "https://github.com/zao95/react-cache-api#readme",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/zao95/react-cache-api"
+    },
+    "license": "MIT License",
+    "author": {
+        "name": "Lee Jeongwoo",
+        "email": "awmaker@kakao.com",
+        "url": "https://portfolio.awmaker.com"
+    },
+    "files": [
+        "/dist/*",
+        "/src/*",
+        "/index.js",
+        "/index.d.ts"
+    ],
+    "scripts": {
+        "babel": "node babel.js",
+        "prePublish": "webpack --mode=production"
+    },
+    "peerDependencies": {
+        "react": ">=16.8.0",
+        "react-dom": ">=16.8.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.16.12",
+        "@babel/preset-env": "^7.16.11",
+        "@types/react": "^17.0.38",
+        "babel-loader": "^8.2.3",
+        "node-fetch": "^3.2.0",
+        "webpack": "^5.67.0",
+        "webpack-cli": "^4.9.1"
+    }
+}
