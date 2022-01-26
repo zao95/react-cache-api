@@ -55,7 +55,7 @@ const useCacheApi = (key, query = {}, options = null) => {
                     String(
                         _objectIsNull(query) ? '' : `?${_objectToString(query)}`
                     )
-                const data = await fetch(requestUrl, options).json()
+                const data = (await fetch(requestUrl, options)).json()
                 setData(data)
                 setIsValidation(false)
                 cache.set(key, { data, query })
