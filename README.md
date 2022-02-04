@@ -11,7 +11,7 @@ It was inspired by the [swr](https://swr.vercel.app/).
 ```javascript
 // Please wrap the component to call useCacheApi with this component.
 // In the case of nextJS, it is recommended to wrap the component in the _app file.
-<CacheApiConfig baseURL="https://yourapiendpoint">
+<CacheApiConfig baseURL="https://yourapibaseurl">
     <Component />
 </CacheApiConfig>
 ```
