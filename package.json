@@ -1,6 +1,6 @@
 {
     "name": "react-cache-api",
-    "version": "0.1.3",
+    "version": "1.0.0",
     "description": "Save network request using cache.",
     "keywords": [
         "api",
