@@ -2,7 +2,13 @@ const React = require('react')
 const { createContext, useContext, useEffect, useState } = require('react')
 
 const _objectToString = (obj) => {
-    return JSON.stringify(obj).replace(/\{|\}|\"/g, '')
+    let query = ''
+    for (const [key, value] of Object.entries(obj)) {
+        if (query) query += `&`
+        query += key
+        if (value) query += `=${value}`
+    }
+    return query
 }
 const _objectIsNull = (obj) => {
     return JSON.stringify(obj) === '{}'
