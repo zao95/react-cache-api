@@ -30,27 +30,11 @@ const CacheApiConfig = ({ baseURL, children }) => {
     )
 }
 
-// interface query {
-//     [key: string]: any
-// }
-// interface options {
-//     [key: string]: any
-// }
-// type propType = [string, (query | null)?, (options | null)?]
 const useCacheApi = (key, query = {}, options = null) => {
     try {
-        if (!key) {
-            return
-        }
         const { baseURL, cache } = useContext(CacheApiContext)
         const [data, setData] = useState(null)
         const [isValidation, setIsValidation] = useState(false)
-        if (
-            cache.has(key) &&
-            (_objectIsNull(query) || _objectIsSame(cache.get(key).query, query))
-        ) {
-            return { data: cache.get(key).data, error: null, isValidation }
-        }
 
         useEffect(() => {
             const getData = async () => {
@@ -66,7 +50,18 @@ const useCacheApi = (key, query = {}, options = null) => {
                 setIsValidation(false)
                 cache.set(key, { data, query })
             }
-            getData()
+
+            if (!key) throw Error('key is not defined')
+            else if (
+                cache.has(key) &&
+                (_objectIsNull(query) ||
+                    _objectIsSame(cache.get(key).query, query))
+            ) {
+                setData(cache.get(key))
+                setIsValidation(false)
+            } else {
+                getData()
+            }
         }, [JSON.stringify(query)])
 
         return { data, error: null, isValidation }
