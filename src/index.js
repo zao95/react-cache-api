@@ -42,9 +42,11 @@ const CacheApiConfig = ({ baseURL, children }) => {
 const useCacheApi = (key, query = {}, options = null) => {
     try {
         let immutability = false
-        if (options.immutability === true) {
-            immutability = true
-        }
+        try {
+            if (options && options.immutability === true) {
+                immutability = true
+            }
+        } catch (e) {}
         options = _objectWithoutProperties(options, ['immutability'])
         const { baseURL, cache } = useContext(CacheApiContext)
         const [data, setData] = useState(null)
@@ -66,7 +68,7 @@ const useCacheApi = (key, query = {}, options = null) => {
                 baseURL +
                 key +
                 String(_objectIsNull(query) ? '' : `?${_objectToString(query)}`)
-            const data = await (await fetch(requestUrl, option)).json()
+            const data = await (await fetch(requestUrl, options)).json()
             setData(data)
             setIsValidation(false)
             cache.set(key, { data, query })
