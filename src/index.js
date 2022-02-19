@@ -32,29 +32,34 @@ const CacheApiConfig = ({ baseURL, children }) => {
 
 const useCacheApi = (key, query = {}, options = null) => {
     try {
+        const { immutability, ...options } = options
         const { baseURL, cache } = useContext(CacheApiContext)
         const [data, setData] = useState(null)
         const [isValidation, setIsValidation] = useState(false)
         const cacheData = cache.get(key) && cache.get(key).data
+        const documentObject = () => {
+            if (typeof window === 'object' && immutability !== true) {
+                return document.location.pathname
+            }
+        }
 
         if (typeof key !== 'string') {
             key = key()
         }
 
+        const getData = async () => {
+            setIsValidation(true)
+            const requestUrl =
+                baseURL +
+                key +
+                String(_objectIsNull(query) ? '' : `?${_objectToString(query)}`)
+            const data = await (await fetch(requestUrl, options)).json()
+            setData(data)
+            setIsValidation(false)
+            cache.set(key, { data, query })
+        }
+
         useEffect(() => {
-            const getData = async () => {
-                setIsValidation(true)
-                const requestUrl =
-                    baseURL +
-                    key +
-                    String(
-                        _objectIsNull(query) ? '' : `?${_objectToString(query)}`
-                    )
-                const data = await (await fetch(requestUrl, options)).json()
-                setData(data)
-                setIsValidation(false)
-                cache.set(key, { data, query })
-            }
             if (!key) {
                 return { data, error: null, isValidation }
             } else if (
@@ -68,6 +73,12 @@ const useCacheApi = (key, query = {}, options = null) => {
                 getData()
             }
         }, [key, JSON.stringify(query), cacheData])
+
+        useEffect(() => {
+            if (documentObject()) {
+                cache.clear()
+            }
+        }, [documentObject()])
 
         return { data, error: null, isValidation }
     } catch (error) {
