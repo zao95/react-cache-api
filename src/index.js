@@ -57,7 +57,7 @@ const useCacheApi = (key, query = {}, options = null) => {
                 (_objectIsNull(query) ||
                     _objectIsSame(cache.get(key).query, query))
             ) {
-                setData(cache.get(key))
+                setData(cache.get(key).data)
                 setIsValidation(false)
             } else {
                 getData()
