@@ -62,7 +62,7 @@ const useCacheApi = (key, query = {}, options = null) => {
             } else {
                 getData()
             }
-        }, [JSON.stringify(query)])
+        }, [key, JSON.stringify(query)])
 
         return { data, error: null, isValidation }
     } catch (error) {
