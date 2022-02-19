@@ -41,16 +41,10 @@ const CacheApiConfig = ({ baseURL, children }) => {
 
 const useCacheApi = (key, query = {}, options = null) => {
     try {
-        let immutability = false
-        try {
-            if (options && options.immutability === true) {
-                immutability = true
-            }
-        } catch (e) {}
-        options = _objectWithoutProperties(options, ['immutability'])
         const { baseURL, cache } = useContext(CacheApiContext)
         const [data, setData] = useState(null)
         const [isValidation, setIsValidation] = useState(false)
+        const [doFetch, setDoFetch] = useState(false)
         const cacheData = cache.get(key) && cache.get(key).data
         const documentObject = () => {
             if (typeof window === 'object' && immutability !== true) {
@@ -58,11 +52,22 @@ const useCacheApi = (key, query = {}, options = null) => {
             }
         }
 
+        // Set immutability
+        let immutability = false
+        try {
+            if (options && options.immutability === true) {
+                immutability = true
+            }
+        } catch (e) {}
+        options = _objectWithoutProperties(options, ['immutability'])
+
+        // Execute key when key is function
         if (typeof key !== 'string') {
             key = key()
         }
 
         const getData = async () => {
+            setDoFetch(false)
             setIsValidation(true)
             const requestUrl =
                 baseURL +
@@ -85,15 +90,21 @@ const useCacheApi = (key, query = {}, options = null) => {
                 setData(cache.get(key).data)
                 setIsValidation(false)
             } else {
-                getData()
+                setDoFetch(true)
             }
         }, [key, JSON.stringify(query), cacheData])
 
         useEffect(() => {
             if (documentObject()) {
-                cache.clear()
+                setDoFetch(true)
             }
         }, [documentObject()])
+
+        useEffect(() => {
+            if (doFetch === true) {
+                getData()
+            }
+        }, [doFetch])
 
         return { data, error: null, isValidation }
     } catch (error) {
