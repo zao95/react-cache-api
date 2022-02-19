@@ -6,7 +6,7 @@ const _objectToString = (obj) => {
     for (const [key, value] of Object.entries(obj)) {
         if (query) query += `&`
         query += key
-        if (value) query += `=${value}`
+        if (value !== undefined) query += `=${value}`
     }
     return query
 }
