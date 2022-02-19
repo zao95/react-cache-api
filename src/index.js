@@ -16,6 +16,15 @@ const _objectIsNull = (obj) => {
 const _objectIsSame = (currentObj, targetObj) => {
     return JSON.stringify(currentObj) === JSON.stringify(targetObj)
 }
+const _objectWithoutProperties = (obj, keys) => {
+    const target = {}
+    for (const key in obj) {
+        if (keys.indexOf(key) >= 0) continue
+        if (!Object.prototype.hasOwnProperty.call(obj, key)) continue
+        target[key] = obj[key]
+    }
+    return target
+}
 
 const cacheApiConfig = {
     baseURL: null,
@@ -32,7 +41,11 @@ const CacheApiConfig = ({ baseURL, children }) => {
 
 const useCacheApi = (key, query = {}, options = null) => {
     try {
-        const { immutability, ...option } = options
+        let immutability = false
+        if (options.immutability === true) {
+            immutability = true
+        }
+        options = _objectWithoutProperties(options, ['immutability'])
         const { baseURL, cache } = useContext(CacheApiContext)
         const [data, setData] = useState(null)
         const [isValidation, setIsValidation] = useState(false)

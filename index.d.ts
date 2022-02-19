@@ -26,6 +26,9 @@ declare module 'react-cache-api' {
         }
         isValidation: boolean
     }
+    interface IOptions extends RequestInit {
+        immutability?: boolean
+    }
     /**
      * If the cache has a response value for the corresponding key and requests it without query, the value is taken from the cache.
      * If not, request api through fetch.
@@ -36,6 +39,6 @@ declare module 'react-cache-api' {
     export function useCacheApi(
         key: string | (() => string | null | undefined),
         query?: any | null,
-        options?: RequestInit | null
+        options?: IOptions | null
     ): IReturn
 }
