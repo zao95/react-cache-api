@@ -51,8 +51,12 @@ const useCacheApi = (key, query = {}, options = null) => {
                 cache.set(key, { data, query })
             }
 
-            if (!key) throw Error('key is not defined')
-            else if (
+            if (typeof key !== 'string') {
+                key = key()
+            }
+            if (!key) {
+                return { data, error: null, isValidation }
+            } else if (
                 cache.has(key) &&
                 (_objectIsNull(query) ||
                     _objectIsSame(cache.get(key).query, query))
