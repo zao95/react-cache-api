@@ -11,7 +11,7 @@ const _objectToString = (obj) => {
     return query
 }
 const _objectIsNull = (obj) => {
-    return JSON.stringify(obj) === '{}'
+    return JSON.stringify(obj) === '{}' || obj === null || obj === undefined
 }
 const _objectIsSame = (currentObj, targetObj) => {
     return JSON.stringify(currentObj) === JSON.stringify(targetObj)
@@ -35,6 +35,11 @@ const useCacheApi = (key, query = {}, options = null) => {
         const { baseURL, cache } = useContext(CacheApiContext)
         const [data, setData] = useState(null)
         const [isValidation, setIsValidation] = useState(false)
+        const cacheData = cache.get(key) && cache.get(key).data
+
+        if (typeof key !== 'string') {
+            key = key()
+        }
 
         useEffect(() => {
             const getData = async () => {
@@ -50,10 +55,6 @@ const useCacheApi = (key, query = {}, options = null) => {
                 setIsValidation(false)
                 cache.set(key, { data, query })
             }
-
-            if (typeof key !== 'string') {
-                key = key()
-            }
             if (!key) {
                 return { data, error: null, isValidation }
             } else if (
@@ -66,7 +67,7 @@ const useCacheApi = (key, query = {}, options = null) => {
             } else {
                 getData()
             }
-        }, [key, JSON.stringify(query)])
+        }, [key, JSON.stringify(query), cacheData])
 
         return { data, error: null, isValidation }
     } catch (error) {

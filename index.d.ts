@@ -34,7 +34,7 @@ declare module 'react-cache-api' {
      * @param options Fetch api's options
      */
     export function useCacheApi(
-        key: string | Function,
+        key: string | (() => string | null | undefined),
         query?: any | null,
         options?: RequestInit | null
     ): IReturn
